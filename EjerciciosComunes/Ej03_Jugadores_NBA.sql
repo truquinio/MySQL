@@ -112,7 +112,7 @@ GROUP BY eqp.nombre;
 #	12.  Mostrar el jugador que más puntos ha realizado en toda su carrera.
 SELECT nombre
 FROM jugador
-WHERE codigo =(SELECT jugador
+WHERE codigo = (SELECT jugador
                 FROM estadistica
                 GROUP BY jugador
                 HAVING SUM(Puntos_por_partido) = (SELECT MAX(sumas.Total)
