@@ -225,7 +225,10 @@ WHERE prod.nombre IS NULL;
 #	1.    Devuelve todos los productos del fabricante Lenovo. (Sin utilizar INNER JOIN).
 SELECT *
 FROM producto
-WHERE codigo_fabricante = (SELECT codigo FROM fabricante WHERE nombre LIKE 'Lenovo');
+WHERE codigo_fabricante = (SELECT codigo 
+			   FROM fabricante 
+			   WHERE nombre 
+			   LIKE 'Lenovo');
 
 #	2.   Devuelve todos los datos de los productos que tienen el mismo precio que el producto 
 #	más caro del fabricante Lenovo. (Sin utilizar INNER JOIN).
@@ -235,24 +238,23 @@ SELECT max(precio) FROM producto WHERE codigo_fabricante = 2;	#	Busco el precio 
 #	 Resuelvo:
 SELECT *
 FROM producto
-WHERE precio = (SELECT max(precio)
-				FROM producto
-                WHERE codigo_fabricante = (SELECT codigo
-											FROM fabricante 
-                                            WHERE nombre LIKE 'Lenovo'));
+WHERE precio = (SELECT max(precio) 
+		FROM producto
+		WHERE codigo_fabricante = (SELECT codigo
+					   FROM fabricante
+					   WHERE nombre LIKE 'Lenovo'));
 
 #	3.   Lista el nombre del producto más caro del fabricante Lenovo.
 SELECT nombre
 FROM producto
 WHERE precio = (SELECT max(precio)
-				FROM producto
-                WHERE codigo_fabricante = (SELECT codigo
-											FROM fabricante 
-                                            WHERE nombre LIKE 'Lenovo'))
-#	Le digo que si o si me muestre fabricante Lenovo.
-AND codigo_fabricante = (SELECT codigo 
-							FROM fabricante 
-                            WHERE nombre LIKE 'Lenovo');
+		FROM producto
+		WHERE codigo_fabricante = (SELECT codigo
+					   FROM fabricante
+					   WHERE nombre LIKE 'Lenovo'))
+AND codigo_fabricante = (SELECT codigo
+			 FROM fabricante
+			 WHERE nombre LIKE 'Lenovo');	#	Le digo que si o si me muestre fabricante Lenovo.
 
 #	4.   Lista todos los productos del fabricante Asus que tienen un precio superior al 
 #	precio medio de todos sus productos.
@@ -263,17 +265,17 @@ SELECT * FROM producto WHERE codigo_fabricante = 1;
 #	Calculo el precio promedio de productos Asus.
 SELECT avg(precio) FROM producto WHERE codigo_fabricante = 1;
 
-
+#	Resuelvo:
 SELECT *
 FROM producto
-WHERE codigo_fabricante = (SELECT codigo 
-							FROM fabricante 
-                            WHERE nombre LIKE 'Asus')
+WHERE codigo_fabricante = (SELECT codigo
+			   FROM fabricante
+			   WHERE nombre LIKE 'Asus')
 AND precio > (SELECT avg(precio)
-				FROM producto
-                WHERE codigo_fabricante = (SELECT codigo
-											FROM fabricante
-                                            WHERE nombre LIKE 'Asus'));
+	      FROM producto
+	      WHERE codigo_fabricante = (SELECT codigo
+					 FROM fabricante
+					 WHERE nombre LIKE 'Asus'));
 
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #	Subconsultas con IN y NOT IN
@@ -281,20 +283,21 @@ AND precio > (SELECT avg(precio)
 SELECT nombre
 FROM fabricante
 WHERE codigo IN (SELECT distinct(codigo_fabricante)
-					FROM producto);
+		 FROM producto);
 
 #	2.   Devuelve los nombres de los fabricantes que no tienen productos asociados. (Utilizando IN o NOT IN).
 SELECT nombre
 FROM fabricante
 WHERE codigo NOT IN (SELECT distinct(codigo_fabricante)
-					FROM producto);
+		     FROM producto);
 
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #	Subconsultas (En la cláusula HAVING)
 #	1.    Devuelve un listado con todos los nombres de los fabricantes que tienen el mismo número 
 #	de productos que el fabricante Lenovo.
 SELECT nombre
 FROM fabricante
-WHERE codigo in (SELECT codigo_fabricante
+WHERE codigo IN (SELECT codigo_fabricante
                 FROM producto
                 GROUP BY codigo_fabricante
                 HAVING COUNT(*) = (SELECT COUNT(*)
