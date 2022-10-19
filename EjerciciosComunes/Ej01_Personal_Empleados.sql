@@ -107,7 +107,8 @@ HAVING COUNT(*) = 0;
 #	27. Mostrar la lista de los empleados cuyo salario es mayor o igual que el promedio de la empresa. Ordenarlo por departamento.
 SELECT id_depto, nombre, salario
 FROM empleado
-WHERE salario >= (SELECT AVG(salario) FROM empleado)
+WHERE salario >= (SELECT AVG(salario)
+                  FROM empleado)
 ORDER BY id_depto;
 
 #	OTRA FORMA con INNER JOIN:
@@ -115,5 +116,6 @@ SELECT *
 FROM empleado AS empl
 INNER JOIN departamento AS dpto
 ON empl.id_depto = dpto.id_depto
-WHERE empl.salario >= (SELECT AVG(salario) FROM empleado)
+WHERE empl.salario >= (SELECT AVG(salario)
+                       FROM empleado)
 ORDER BY dpto.nombre_depto;
