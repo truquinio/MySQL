@@ -46,7 +46,7 @@ SELECT nombre AS 'NOMBRE:', cargo AS 'CARGO:' FROM empleado;
 SELECT salario, comision, id_depto FROM empleado WHERE id_depto = 2000 ORDER BY comision ASC;
 
 #	11.   Obtener el valor total a pagar que resulta de sumar el salario y la comisión de los empleados del departamento 3000 una bonificación de 500, en orden alfabético del empleado.
-SELECT salario, comision, (salario + 500) AS 'Salario + Comisión' FROM empleado 
+SELECT nombre, salario, comision, (salario+comision+500) AS 'Salario + Comision + 500' FROM empleado 
 WHERE id_depto = '3000' ORDER BY nombre ASC;
 
 #	12.  Muestra los empleados cuyo nombre empiece con la letra J.
@@ -96,7 +96,7 @@ HAVING Num_Empleados > 3;
 SELECT *, COUNT(*) AS 'Num_Empleados' 
 FROM empleado 
 GROUP BY id_depto 
-HAVING Num_Empleados > 2 AND cargo LIKE 'Jefe%';
+HAVING Num_Empleados >= 2 AND cargo LIKE 'Jefe%';
 
 #	26. Hallar los departamentos que no tienen empleados
 SELECT *, COUNT(*)
@@ -113,7 +113,7 @@ ORDER BY id_depto;
 #	OTRA FORMA con INNER JOIN:
 SELECT *
 FROM empleado AS empl
-INNER JOIN departamento as dpto
+INNER JOIN departamento AS dpto
 ON empl.id_depto = dpto.id_depto
 WHERE empl.salario >= (SELECT AVG(salario) FROM empleado)
 ORDER BY dpto.nombre_depto;
