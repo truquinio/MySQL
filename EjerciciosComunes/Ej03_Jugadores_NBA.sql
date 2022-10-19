@@ -116,20 +116,21 @@ WHERE codigo =(SELECT jugador
                 FROM estadistica
                 GROUP BY jugador
                 HAVING SUM(Puntos_por_partido) = (SELECT MAX(sumas.Total)
-                                                    FROM (SELECT SUM(Puntos_por_partido) as 'Total'
-                                                            FROM estadistica
-                                                            GROUP BY jugador) as sumas));
+                                                  FROM (SELECT SUM(Puntos_por_partido) AS 'Total'
+                                                        FROM estadistica
+                                                        GROUP BY jugador) AS sumas));
 
 #	FORMA 2:
 SELECT suma.nombre, suma.puntos
 FROM (SELECT jug.nombre, sum(est.Puntos_por_partido) AS 'puntos'
-        FROM jugador jug, estadistica est
-        WHERE jug.codigo = est.jugador 
-        GROUP BY jug.nombre) suma
-WHERE suma.puntos = (SELECT max(suma2.puntos) FROM (SELECT jug.nombre, sum(est.Puntos_por_partido) AS puntos 
-        FROM jugador jug, estadistica est
-        WHERE jug.codigo = est.jugador 
-        GROUP BY jug.nombre) suma2);
+      FROM jugador jug, estadistica est
+      WHERE jug.codigo = est.jugador
+      GROUP BY jug.nombre) suma
+      
+WHERE suma.puntos = (SELECT max(suma2.puntos) FROM (SELECT jug.nombre, sum(est.Puntos_por_partido) AS puntos
+                                                    FROM jugador jug, estadistica est
+                                                    WHERE jug.codigo = est.jugador
+                                                    GROUP BY jug.nombre) suma2);
 
 
 
