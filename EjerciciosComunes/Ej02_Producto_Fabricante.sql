@@ -232,7 +232,7 @@ WHERE codigo_fabricante = (SELECT codigo
 
 #	2.   Devuelve todos los datos de los productos que tienen el mismo precio que el producto 
 #	más caro del fabricante Lenovo. (Sin utilizar INNER JOIN).
-SELECT codigo FROM fabricante WHERE nombre LIKE 'Lenovo';		#	Busco el código del fabricante Lenovo.
+SELECT codigo FROM fabricante WHERE nombre LIKE 'Lenovo';	#	Busco el código del fabricante Lenovo.
 SELECT max(precio) FROM producto WHERE codigo_fabricante = 2;	#	Busco el precio máximo de Lenovo.
 
 #	 Resuelvo:
