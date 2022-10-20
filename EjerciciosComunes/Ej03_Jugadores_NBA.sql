@@ -170,5 +170,5 @@ SELECT equipo_local, puntos_local, equipo_visitante, puntos_visitante FROM parti
 
 #	18.  Mostrar quien gana en cada partido (codigo, equipo_local, equipo_visitante, equipo_ganador), 
 #	en caso de empate sera null.
-SELECT codigo, equipo_local, equipo_visitante, IF(puntos_local>puntos_visitante, equipo_local, IF(puntos_local<puntos_visitante, equipo_visitante, null)) as 'equipo_ganador'
+SELECT codigo, equipo_local, equipo_visitante, IF(puntos_local>puntos_visitante, equipo_local, IF(puntos_local<puntos_visitante, equipo_visitante, null)) AS 'equipo_ganador'
 FROM partido;
