@@ -232,7 +232,7 @@ WHERE codigo_fabricante = (SELECT codigo
 
 #	2.   Devuelve todos los datos de los productos que tienen el mismo precio que el producto 
 #	más caro del fabricante Lenovo. (Sin utilizar INNER JOIN).
-SELECT codigo FROM fabricante WHERE nombre LIKE 'Lenovo';	#	Busco el código del fabricante Lenovo.
+SELECT codigo FROM fabricante WHERE nombre LIKE 'Lenovo';		#	Busco el código del fabricante Lenovo.
 SELECT max(precio) FROM producto WHERE codigo_fabricante = 2;	#	Busco el precio máximo de Lenovo.
 
 #	 Resuelvo:
@@ -283,13 +283,13 @@ AND precio > (SELECT avg(precio)
 SELECT nombre
 FROM fabricante
 WHERE codigo IN (SELECT distinct(codigo_fabricante)
-		 FROM producto);
+				FROM producto);
 
 #	2.   Devuelve los nombres de los fabricantes que no tienen productos asociados. (Utilizando IN o NOT IN).
 SELECT nombre
 FROM fabricante
 WHERE codigo NOT IN (SELECT distinct(codigo_fabricante)
-		     FROM producto);
+					FROM producto);
 
 #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #	Subconsultas (En la cláusula HAVING)
