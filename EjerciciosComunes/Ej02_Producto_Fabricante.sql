@@ -3,7 +3,7 @@ Abrir el script de la base de datos llamada “tienda.sql” y ejecutarlo para c
 insertar datos en las mismas. A continuación, generar el modelo de entidad relación. Deberá 
 obtener un diagrama de entidad relación igual al que se muestra a continuación: 
 
-Fabricante ||---------|< Producto
+Fabricante ||--------|< Producto
 
 A continuación, se deben realizar las siguientes consultas sobre la base de datos:
 */
