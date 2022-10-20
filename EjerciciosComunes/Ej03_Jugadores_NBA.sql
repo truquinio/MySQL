@@ -140,13 +140,13 @@ AND lower(jug.nombre) = 'Shaquille ONeal';
 SELECT jug.nombre AS 'jugador', jug.altura, eqp.nombre AS equipo, eqp.conferencia, eqp.division 
 FROM equipo eqp, jugador jug
 WHERE eqp.nombre = jug.nombre_equipo 
-AND jug.altura = (SELECT max(altura) 
-					FROM jugador);
+AND jug.altura = (SELECT max(altura)
+		  FROM jugador);
 
 #	14.  Mostrar la media de puntos en partidos de los equipos de la división Pacific.
-SELECT part.equipo_local, AVG(part.puntos_local) as 'Media_de_puntos', eqp.division
-FROM partido as part
-INNER JOIN equipo as eqp
+SELECT part.equipo_local, AVG(part.puntos_local) AS 'Media_de_puntos', eqp.division
+FROM partido AS part
+INNER JOIN equipo AS eqp
 ON part.equipo_local = eqp.nombre
 WHERE eqp.division = 'Pacific'
 GROUP BY part.equipo_local;
@@ -154,12 +154,13 @@ GROUP BY part.equipo_local;
 #	15. Mostrar el partido o partidos (equipo_local, equipo_visitante y diferencia) con mayor diferencia de puntos.
 SELECT *
 FROM partido
-WHERE abs(puntos_local - puntos_visitante) = (SELECT max(abs(puntos_local - puntos_visitante)) FROM partido);
+WHERE abs(puntos_local - puntos_visitante) = (SELECT max(abs(puntos_local - puntos_visitante))
+					      FROM partido);
 
 #	16.  Mostrar la media de puntos en partidos de los equipos de la división Pacific.
 SELECT eqp.nombre, AVG(puntos_local) AS 'Promedio puntos', eqp.division
-FROM partido as part
-INNER JOIN equipo as eqp
+FROM partido AS part
+INNER JOIN equipo AS eqp
 ON part.equipo_local = eqp.nombre
 WHERE eqp.division = 'Pacific'
 GROUP BY eqp.nombre;
