@@ -4,57 +4,220 @@ tablas e insertar datos en las mismas. Deberá obtener un diagrama de entidad re
 que se muestra a continuación:
 
 A continuación, se deben realizar las siguientes consultas sobre la base de datos: 
-Consultas sobre una tabla
-1.   Devuelve un listado con el código de oficina y la ciudad donde hay oficinas.
-2.   Devuelve un listado con la ciudad y el teléfono de las oficinas de España.
-3.   Devuelve un listado con el nombre, apellidos y email de los empleados cuyo jefe tiene un 
-código de jefe igual a 7.
-4.   Devuelve el nombre del puesto, nombre, apellidos y email del jefe de la empresa.
-5.   Devuelve un listado con el nombre, apellidos y puesto de aquellos empleados que no sean 
-representantes de ventas.
-6.   Devuelve un listado con el nombre de los todos los clientes españoles.
-7.   Devuelve un listado con los distintos estados por los que puede pasar un pedido.
-8. Devuelve un listado con el código de cliente de aquellos clientes que realizaron algún pago 
-en 2008. Tenga en cuenta que deberá eliminar aquellos códigos de cliente que aparezcan 
-repetidos. Resuelva la consulta:
-o Utilizando la función YEAR de MySQL.
-o Utilizando la función DATE_FORMAT de MySQL. 
-o Sin utilizar ninguna de las funciones anteriores.
-9.   Devuelve un listado con el código de pedido, código de cliente, fecha esperada y fecha de 
-entrega de los pedidos que no han sido entregados a tiempo.
-10.	Devuelve un listado con el código de pedido, código de cliente, fecha esperada y fecha de 
-entrega de los pedidos cuya fecha de entrega ha sido al menos dos días antes de la fecha 
-esperada.
-o Utilizando la función ADDDATE de MySQL. 
-o Utilizando la función DATEDIFF de MySQL.
-11.   Devuelve un listado de todos los pedidos que fueron rechazados en 2009.
-12.  Devuelve un listado de todos los pedidos que han sido entregados en el mes de enero de 
-cualquier año.
-13.  Devuelve un listado con todos los pagos que se realizaron en el año 2008 mediante Paypal. 
-Ordene el resultado de mayor a menor.
-14.  Devuelve un listado con todas las formas de pago que aparecen en la tabla pago. Tenga en 
-cuenta que no deben aparecer formas de pago repetidas.
-15. Devuelve un listado con todos los productos que pertenecen a la gama Ornamentales y que 
-tienen más de 100 unidades en stock. El listado deberá estar ordenado por su precio de 
-venta, mostrando en primer lugar los de mayor precio.
-16.  Devuelve un listado con todos los clientes que sean de la ciudad de Madrid y cuyo 
-representante de ventas tenga el código de empleado 11 o 30.
-Consultas multitabla (Composición interna)
-Las consultas se deben resolver con INNER JOIN.
-1.    Obtén un listado con el nombre de cada cliente y el nombre y apellido de su representante 
-de ventas.
-2.   Muestra el nombre de los clientes que hayan realizado pagos junto con el nombre de sus 
-representantes de ventas.
-3.   Muestra el nombre de los clientes que no hayan realizado pagos junto con el nombre de 
-sus representantes de ventas.
-4.   Devuelve el nombre de los clientes que han hecho pagos y el nombre de sus representantes 
-junto con la ciudad de la oficina a la que pertenece el representante.
-5.   Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre de sus 
-representantes junto con la ciudad de la oficina a la que pertenece el representante.
-6.   Lista la dirección de las oficinas que tengan clientes en Fuenlabrada.
-7.   Devuelve el nombre de los clientes y el nombre de sus representantes junto con la ciudad 
-de la oficina a la que pertenece el representante.
-8.   Devuelve un listado con el nombre de los empleados junto con el nombre de sus jefes.
+*/
+USE jardineria;
+SELECT * FROM cliente;
+SELECT * FROM detalle_pedido;
+SELECT * FROM empleado;
+SELECT * FROM gama_producto;
+SELECT * FROM oficina;
+SELECT * FROM pago;
+SELECT * FROM pedido;
+SELECT * FROM producto;
+
+#	Consultas sobre una tabla
+#	1.   Devuelve un listado con el código de oficina y la ciudad donde hay oficinas.
+SELECT codigo_oficina, ciudad
+FROM oficina;
+
+#	2.	Devuelve un listado con la ciudad y el teléfono de las oficinas de España.
+SELECT ciudad, telefono, pais
+FROM oficina
+WHERE pais LIKE 'España';
+
+#	3.   Devuelve un listado con el nombre, apellidos y email de los empleados cuyo jefe tiene un código de jefe igual a 7.
+SELECT nombre, apellido1, apellido2, email, codigo_jefe
+FROM empleado
+WHERE codigo_jefe = 7;
+
+#	4.   Devuelve el nombre del puesto, nombre, apellidos y email del jefe de la empresa.
+SELECT puesto, nombre, apellido1, apellido2, email, codigo_jefe
+FROM empleado
+WHERE codigo_jefe IS NULL;
+
+#	OTRA FORMA:
+SELECT puesto, nombre, apellido1, apellido2, email, codigo_jefe
+FROM empleado
+WHERE puesto LIKE 'Director General';
+
+#	5.   Devuelve un listado con el nombre, apellidos y puesto de aquellos empleados que no sean representantes de ventas.
+SELECT nombre, apellido1, apellido2, puesto
+FROM empleado
+WHERE puesto != 'Representante Ventas';
+
+#	Devuelve un listado con el nombre, apellidos y puesto de aquellos empleados que sean representantes de ventas.
+SELECT nombre, apellido1, apellido2, puesto
+FROM empleado
+WHERE puesto = 'Representante Ventas';
+
+#	6.   Devuelve un listado con el nombre de los todos los clientes españoles.
+SELECT nombre_cliente, pais
+FROM cliente
+WHERE pais = 'Spain';
+
+#	7.   Devuelve un listado con los distintos estados por los que puede pasar un pedido.
+SELECT distinct(estado) FROM pedido;
+
+#	8. Devuelve un listado con el código de cliente de aquellos clientes que realizaron algún pago en 2008.
+#	Tenga en cuenta que deberá eliminar aquellos códigos de cliente que aparezcan repetidos. 
+#	Resuelva la consulta:
+
+#	Utilizando la función YEAR de MySQL.
+SELECT distinct(codigo_cliente), fecha_pago
+FROM pago
+WHERE YEAR(fecha_pago) = 2008;
+
+#	Utilizando la función DATE_FORMAT de MySQL. 
+SELECT distinct(codigo_cliente), fecha_pago
+FROM pago
+WHERE DATE_FORMAT(fecha_pago, "%Y") = 2008;
+
+#	Sin utilizar ninguna de las funciones anteriores.
+SELECT distinct(codigo_cliente), fecha_pago
+FROM pago
+WHERE LEFT(fecha_pago, 4) = 2008;
+
+#	9.   Devuelve un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos 
+#	que no han sido entregados a tiempo. 
+SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+FROM pedido
+WHERE fecha_entrega > fecha_esperada;
+
+#	10.	Devuelve un listado con el código de pedido, código de cliente, fecha esperada y fecha de 
+#	entrega de los pedidos cuya fecha de entrega ha sido al menos dos días antes de la fecha 
+#	esperada.
+
+#	Utilizando la función ADDDATE de MySQL.	(FUNCIONA CON DÍAS, MESES, AÑOS...)
+SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+FROM pedido
+WHERE adddate(fecha_entrega, interval 2 day) <= fecha_esperada;
+
+#	Utilizando la función DATEDIFF de MySQL. (SÓLO FUNCIONA CON DÍAS)
+SELECT codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+FROM pedido
+WHERE datediff(fecha_entrega, fecha_esperada) >= 2;
+
+#	11.   Devuelve un listado de todos los pedidos que fueron rechazados en 2009.
+SELECT * FROM pedido
+WHERE estado LIKE 'Rechazado' AND year(fecha_pedido) = 2009;
+
+#	12.  Devuelve un listado de todos los pedidos que han sido entregados en el mes de enero de cualquier año.
+SELECT * FROM pedido
+WHERE estado LIKE 'Entregado' AND month(fecha_entrega) = 01;
+
+#	13.  Devuelve un listado con todos los pagos que se realizaron en el año 2008 mediante Paypal. 
+#	Ordene el resultado de mayor a menor.
+SELECT * FROM pago
+WHERE forma_pago LIKE 'Paypal' AND year(fecha_pago) = 2008;
+
+#	14.  Devuelve un listado con todas las formas de pago que aparecen en la tabla pago. Tenga en 
+#	cuenta que no deben aparecer formas de pago repetidas.
+SELECT distinct forma_pago FROM pago;
+
+#	15. Devuelve un listado con todos los productos que pertenecen a la gama Ornamentales y que 
+#	tienen más de 100 unidades en stock. El listado deberá estar ordenado por su precio de 
+#	venta, mostrando en primer lugar los de mayor precio.
+SELECT nombre, gama, cantidad_en_stock, precio_venta
+FROM producto
+WHERE gama LIKE 'Ornamentales' AND cantidad_en_stock > 100
+ORDER BY precio_venta DESC;
+
+#	16.  Devuelve un listado con todos los clientes que sean de la ciudad de Madrid y cuyo 
+#	representante de ventas tenga el código de empleado 11 o 30.
+SELECT nombre_cliente, ciudad, codigo_empleado_rep_ventas FROM cliente
+WHERE ciudad LIKE 'Madrid' 
+AND codigo_empleado_rep_ventas IN (11, 30);
+
+#	OTRA FORMA:
+SELECT nombre_cliente, ciudad, codigo_empleado_rep_ventas FROM cliente
+WHERE ciudad LIKE 'Madrid' 
+AND (codigo_empleado_rep_ventas = 11 OR codigo_empleado_rep_ventas = 30);
+
+#	Consultas multitabla (Composición interna) Las consultas se deben resolver con INNER JOIN.
+#	1.    Obtén un listado con el nombre de cada cliente y el nombre y apellido de su representante de ventas.
+SELECT cli.nombre_cliente, concat(empl.nombre, ' ', empl.apellido1, ' ', empl.apellido2) AS 'Vendedor', empl.puesto
+FROM cliente AS cli
+INNER JOIN empleado AS empl
+ON cli.codigo_empleado_rep_ventas = empl.codigo_empleado
+WHERE empl.puesto = 'Representante Ventas';
+
+#	2.   Muestra el nombre de los clientes que hayan realizado pagos junto con el nombre de sus representantes de ventas.
+SELECT distinct cli.codigo_cliente, cli.nombre_cliente, concat(empl.nombre, ' ', 
+empl.apellido1, ' ', empl.apellido2) AS 'Vendedor', empl.puesto, pago.forma_pago
+FROM cliente AS cli
+INNER JOIN empleado AS empl
+ON cli.codigo_empleado_rep_ventas = empl.codigo_empleado
+INNER JOIN pago
+ON cli.codigo_cliente = pago.codigo_cliente
+WHERE empl.puesto = 'Representante Ventas'
+ORDER BY cli.codigo_cliente;
+
+#	3.   Muestra el nombre de los clientes que no hayan realizado pagos junto con el nombre de 
+#	sus representantes de ventas.
+SELECT distinct cli.codigo_cliente, cli.nombre_cliente, concat(empl.nombre, ' ', 
+empl.apellido1, ' ', empl.apellido2) AS 'Vendedor', empl.puesto
+FROM cliente AS cli
+INNER JOIN empleado AS empl
+ON cli.codigo_empleado_rep_ventas = empl.codigo_empleado
+WHERE empl.puesto = 'Representante Ventas' AND cli.codigo_cliente NOT IN (SELECT pago.codigo_cliente FROM pago)
+ORDER BY cli.codigo_cliente;
+
+#	4.   Devuelve el nombre de los clientes que han hecho pagos y el nombre de sus representantes 
+#	junto con la ciudad de la oficina a la que pertenece el representante.
+SELECT distinct cli.codigo_cliente, cli.nombre_cliente, concat(empl.nombre, ' ', 
+empl.apellido1, ' ', empl.apellido2) AS 'Vendedor', empl.puesto, pago.forma_pago, ofi.ciudad
+FROM cliente AS cli
+INNER JOIN empleado AS empl
+ON cli.codigo_empleado_rep_ventas = empl.codigo_empleado
+INNER JOIN pago
+ON cli.codigo_cliente = pago.codigo_cliente
+INNER JOIN oficina AS ofi
+ON empl.codigo_oficina = ofi.codigo_oficina
+WHERE empl.puesto = 'Representante Ventas'
+ORDER BY cli.codigo_cliente;
+
+#	5.   Devuelve el nombre de los clientes que no hayan hecho pagos y el nombre de sus 
+#	representantes junto con la ciudad de la oficina a la que pertenece el representante.
+SELECT distinct cli.codigo_cliente, cli.nombre_cliente, concat(empl.nombre, ' ', 
+empl.apellido1, ' ', empl.apellido2) AS 'Vendedor', empl.puesto, ofi.ciudad
+FROM cliente AS cli
+INNER JOIN empleado AS empl
+ON cli.codigo_empleado_rep_ventas = empl.codigo_empleado
+INNER JOIN oficina AS ofi
+ON empl.codigo_oficina = ofi.codigo_oficina
+WHERE empl.puesto = 'Representante Ventas' AND cli.codigo_cliente NOT IN (SELECT pago.codigo_cliente FROM pago)
+ORDER BY cli.codigo_cliente;
+
+#	6.   Lista la dirección de las oficinas que tengan clientes en Fuenlabrada.
+SELECT distinct cli.codigo_cliente, cli.ciudad AS 'Ciudad Cliente', cli.nombre_cliente, 
+concat(ofi.linea_direccion1,'. ', ofi.linea_direccion2) AS 'Dirección Oficina', 
+ofi.ciudad AS 'Ciudad Oficina'
+FROM cliente AS cli
+INNER JOIN empleado AS empl
+ON cli.codigo_empleado_rep_ventas = empl.codigo_empleado
+INNER JOIN oficina as ofi
+ON empl.codigo_oficina = ofi.codigo_oficina
+WHERE cli.ciudad = 'Fuenlabrada';
+
+#	7.   Devuelve el nombre de los clientes y el nombre de sus representantes junto con la ciudad 
+#	de la oficina a la que pertenece el representante.
+SELECT distinct cli.codigo_cliente, cli.ciudad AS 'Ciudad Cliente', cli.nombre_cliente, 
+concat(ofi.linea_direccion1,'. ', ofi.linea_direccion2) AS 'Dirección Oficina', 
+ofi.ciudad AS 'Ciudad Oficina'
+FROM cliente AS cli
+INNER JOIN empleado AS empl
+ON cli.codigo_empleado_rep_ventas = empl.codigo_empleado
+INNER JOIN oficina as ofi
+ON empl.codigo_oficina = ofi.codigo_oficina;
+
+#	8.   Devuelve un listado con el nombre de los empleados junto con el nombre de sus jefes.
+SELECT nombre, apellido1, apellido2
+
+
+
+/*
+
+
 9.   Devuelve el nombre de los clientes a los que no se les ha entregado a tiempo un pedido.
 10.  Devuelve un listado de las diferentes gamas de producto que ha comprado cada cliente.
 Consultas multitabla (Composición externa)
