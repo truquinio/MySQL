@@ -131,7 +131,8 @@ Clave:  La clave del candado D estará con formada por la/s siguientes consulta/
 datos: 
 Para obtener el siguiente código deberás redondear hacia abajo, la suma de puntos por partido 
 de todos los jugadores de procedencia argentina.
-*/SELECT sum(e.Tapones_por_partido)
+*/
+SELECT sum(e.Tapones_por_partido)
 FROM estadistica AS e
 INNER JOIN jugador AS j
 ON e.jugador = j.codigo
